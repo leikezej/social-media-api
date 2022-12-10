@@ -1,4 +1,4 @@
-import { db } from "../connect.js";
+import { db } from "../config/db.config.js";
 import jwt from "jsonwebtoken";
 
 export const getRelationships = (req,res)=>{

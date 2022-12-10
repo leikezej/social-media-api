@@ -23,15 +23,15 @@ var corsOptions = {
 
 const sessionStore = new mysqlStore((db));
 
-db.sequelize.sync(
-     {force: true}
-    ).then(() => {
-        console.log('Drop and Resync Database!');
-        initial();
-    }).catch(err => {
-        console.log(err)
-    }
-);
+// db.sequelize.sync(
+//      {force: true}
+//     ).then(() => {
+//         console.log('Drop and Resync Database!');
+//         initial();
+//     }).catch(err => {
+//         console.log(err)
+//     }
+// );
 
 app.use(cookieParser());
 app.use(logger);

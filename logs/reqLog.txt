@@ -49,3 +49,7 @@
 20221211	05:09:36	921025be-f45d-4ee9-9f3d-3dfe57a8165e	POST	undefined	/api/auth/refreshToken
 20221211	05:09:55	d70dc644-2687-4539-92dc-5a358de296b5	POST	undefined	/api/auth/refreshToken
 20221211	05:10:00	ba382c35-2d96-43c5-bcb4-0c042ea0db01	POST	undefined	/api/auth/refreshToken
+20221211	05:15:44	2cf27bc8-9e5b-4380-9be7-74e57dca09da	POST	undefined	/api/auth/signup
+20221211	05:15:46	5d14e145-1138-470a-9e3a-3200cde91238	POST	undefined	/api/auth/signin
+20221211	05:15:59	2d6f5be9-e3ea-40b9-ae30-03158e2ce014	POST	undefined	/api/auth/signin
+20221211	05:17:15	68fb722b-f398-47aa-959e-768bd857a136	POST	undefined	/api/comments

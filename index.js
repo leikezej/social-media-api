@@ -73,7 +73,6 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + file.originalname);
   },
 });
-
 const upload = multer({ storage: storage });
 
 app.post("/api/upload", upload.single("file"), (req, res) => {
@@ -83,10 +82,11 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
 
 require('./routes/auth.routes')(app);
 require('./routes/users.routes')(app);
-// require('./routes/posts.routes')(app);
 // require('./routes/comments.routes')(app);
-// require('./routes/likes.routes')(app);
+// require('./routes/stories.routes')(app);
 // require('./routes/relationships.routes')(app);
+// require('./routes/likes.routes')(app);
+// require('./routes/posts.routes')(app);
 
 const PORT = process.env.PORT || 8800;
 

@@ -1,8 +1,8 @@
-import moment from "moment";
 const db = require("../models");
+const moment = require("moment");
 const Comment = db.comment;
 const Op = db.Sequelize.Op;
-const { user: User, role: Role } = db;
+const { user: User, role: Role, comments: Comments} = db;
 
 exports.create = (req, res) => {
   const comment = {

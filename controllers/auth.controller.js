@@ -9,11 +9,13 @@ var bcrypt = require("bcryptjs");
 // REGISTER
 exports.signup = (req, res) => {
   User.create({
+    id: req.body.id,
     username: req.body.username,
     name: req.body.name,
     email: req.body.email,
     phone: req.body.phone,
     address: req.body.address,
+    website: req.body.website,
     cover_image: req.body.cover_image,
     profile_image: req.body.profile_image,
     password: bcrypt.hashSync(req.body.password, 8)
@@ -131,65 +133,47 @@ exports.refreshToken = async (req, res) => {
 };
 
 // Logout User
-exports.logout = (req, res) => {
-  res.clearCookie("accessToken",{
-    secure:true,
-    sameSite:"none"
-  }).status(200).json("User has been logged out.")
+exports.logout = async (req, res) => {
+  req.session = null;
+  try {
+    res.clearCookie("accessToken", {
+    secure: true,
+    sameSite: "none",
+    message: "You've been signed out!"
+    }).status(200).send({
+      message: "You've been signed out!"
+    });
+  } catch (err) {
+    this.next(err);
+  }
 };
 
-exports.register = (req, res) => {
-  const q = "SELECT * FROM users WHERE username = ?";
+// Signout User
+exports.signout = async (req, res) => {
+      try {
+        req.session = null;
+        return res.status(200).send({
+          message: "Logged Out Successful!"
+        });
+      } catch (err) {
+        this.next(err);
+    }
+        const cookies = req.cookies;
+    if (!cookies?.jwt) return res.sendStatus(204); //No content
+    const refreshToken = cookies.jwt;
 
-  db.query(q, [req.body.username], (err, data) => {
-    if (err) return res.status(500).json(err);
-    if (data.length) return res.status(409).json("User already exists!");
-    //CREATE A NEW USER
-    //Hash the password
-    const salt = bcrypt.genSaltSync(10);
-    const hashedPassword = bcrypt.hashSync(req.body.password, salt);
+    // Is refreshToken in db?
+    const foundUser = await User.findOne({ refreshToken }).exec();
+    if (!foundUser) {
+        res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true });
+        return res.sendStatus(204);
+    }
 
-    const q =
-      "INSERT INTO users (`username`,`email`,`password`,`name`) VALUE (?)";
+    // Delete refreshToken in db
+    foundUser.refreshToken = foundUser.refreshToken.filter(rt => rt !== refreshToken);;
+    const result = await foundUser.save();
+    console.log(result);
 
-    const values = [
-      req.body.username,
-      req.body.email,
-      hashedPassword,
-      req.body.name,
-    ];
-
-    db.query(q, [values], (err, data) => {
-      if (err) return res.status(500).json(err);
-      return res.status(200).json("User has been created.");
-    });
-  });
-}
-
-exports.login = (req, res) => {
-  const q = "SELECT * FROM users WHERE username = ?";
-
-  db.query(q, [req.body.username], (err, data) => {
-    if (err) return res.status(500).json(err);
-    if (data.length === 0) return res.status(404).json("User not found!");
-
-    const checkPassword = bcrypt.compareSync(
-      req.body.password,
-      data[0].password
-    );
-
-    if (!checkPassword)
-      return res.status(400).json("Wrong password or username!");
-
-    const token = jwt.sign({ id: data[0].id }, "secretkey");
-
-    const { password, ...others } = data[0];
-
-    res
-      .cookie("accessToken", token, {
-        httpOnly: true,
-      })
-      .status(200)
-      .json(others);
-  });
-}
+    res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true });
+    res.sendStatus(204);
+};

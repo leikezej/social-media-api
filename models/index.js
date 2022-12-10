@@ -49,6 +49,15 @@ db.user.belongsToMany(db.role, {
   otherKey: "roleId"
 });
 
+db.refreshToken.belongsTo(db.user, {
+  foreignKey: 'userId', targetKey: 'id'
+});
+
+db.user.hasOne(db.refreshToken, {
+  foreignKey: 'userId', targetKey: 'id'
+});
+
+
 // db.timein.belongsToMany(db.timeout, {
 //   through: "time_sheets",
 //   foreignKey: "timein_time",

@@ -31,9 +31,6 @@ module.exports = (sequelize, Sequelize) => {
     website:{
         type: Sequelize.TEXT
     }
-    // userId : {
-    //   type: Sequelize.STRING
-    // }
   });
 
   return User;

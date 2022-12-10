@@ -2,7 +2,6 @@ const db = require("../models");
 const Story = db.stories;
 const Op = db.Sequelize.Op;
 const { user: User, role: Role, posts: Post, relationships: Relationship, Story: stories} = db;
-import moment from "moment";
 
 
 exports.create = (req, res) => {

@@ -10,7 +10,9 @@ import cors from "cors";
 import multer from "multer";
 import cookieParser from "cookie-parser";
 
-//middlewares
+// const morgan = require('morgan');
+
+
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Credentials", true);
   next();
@@ -22,6 +24,9 @@ app.use(
   })
 );
 app.use(cookieParser());
+// app.use(morgan('dev'));
+// app.use(logger);
+
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -46,6 +51,8 @@ app.use("/api/comments", commentRoutes);
 app.use("/api/likes", likeRoutes);
 app.use("/api/relationships", relationshipRoutes);
 
-app.listen(8800, () => {
-  console.log("API working!");
+const PORT = process.env.PORT || 8800;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}.`);
 });

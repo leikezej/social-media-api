@@ -82,7 +82,7 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
 });
 
 require('./routes/auth.routes')(app);
-// require('./routes/users.routes')(app);
+require('./routes/users.routes')(app);
 // require('./routes/posts.routes')(app);
 // require('./routes/comments.routes')(app);
 // require('./routes/likes.routes')(app);

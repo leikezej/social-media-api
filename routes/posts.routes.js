@@ -1,10 +1,14 @@
-// import express from "express";
-// import { getPosts, addPost, deletePost } from "../controllers/post.js";
+const controller = require("../controllers/post.controller");
 
-// const router = express.Router();
+module.exports = function(app) {
 
-// router.get("/", getPosts);
-// router.post("/", addPost);
-// router.delete("/:id", deletePost);
+  app.post("/api/user/posts", controller.create);
+  app.get("/api/user/posts", controller.findAll);
+  app.get("/api/user/posts/:id", controller.findOne);
+  app.delete("/api/user/posts", controller.delete);
+  
+  app.get("/api/user/posts", controller.getPosts);
+  app.post("/api/user/posts", controller.addPost);
+  app.delete("/api/user/posts", controller.deletePost);
 
-// export default router;
+};

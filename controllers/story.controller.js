@@ -1,62 +1,108 @@
-// import { db } from "../config/db.config.js";
+const db = require("../models");
+const Story = db.stories;
+const Op = db.Sequelize.Op;
+const { user: User, role: Role, posts: Post, relationships: Relationship, Story: stories} = db;
+import moment from "moment";
 
-// import jwt from "jsonwebtoken";
-// import moment from "moment";
 
-// export const getStories = (req, res) => {
-//   const token = req.cookies.accessToken;
-//   if (!token) return res.status(401).json("Not logged in!");
+exports.create = (req, res) => {
+  const stories = {
+    name: req.body.name,
+    time: req.body.time,
+    date: req.body.date,
+  };
+  
+  Story.create(stories)
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the Like."
+      });
+    }); 
+};
 
-//   jwt.verify(token, "secretkey", (err, userInfo) => {
-//     if (err) return res.status(403).json("Token is not valid!");
+exports.findAll = (req, res) => {
+    const name = req.query.name;
+    var condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
+    Story.findAll({ where: condition })
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message:
+            err.message || "Some error occurred while retrieving users."
+        });
+      });
+};
 
-//     console.log(userId);
+exports.delete = (req, res) => {
+    const id = req.params.id;
+    Story.destroy({
+      where: { id: id }
+    })
+      .then(num => {
+        if (num == 1) {
+          res.send({
+            message: "Tutorial was deleted successfully!"
+          });
+        } else {
+          res.send({
+            message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`
+          });
+        }
+      })
+      .catch(err => {
+        res.status(500).send({
+          message: "Could not delete Tutorial with id=" + id
+        });
+      });
+};
 
-//     const q = `SELECT s.*, name FROM stories AS s JOIN users AS u ON (u.id = s.userId)
-//     LEFT JOIN relationships AS r ON (s.userId = r.followedUserId AND r.followerUserId= ?) LIMIT 4`;
+exports.getStories = (req, res) => {
+    const q = "SELECT followerUserId FROM relationships WHERE followedUserId = ?";
 
-//     db.query(q, [userInfo.id], (err, data) => {
-//       if (err) return res.status(500).json(err);
-//       return res.status(200).json(data);
-//     });
-//   });
-// };
+    db.query(q, [req.query.followedUserId], (err, data) => {
+      if (err) return res.status(500).json(err);
+      return res.status(200).json(data.map(relationship=>relationship.followerUserId));
+    });
+}
 
-// export const addStory = (req, res) => {
-//   const token = req.cookies.accessToken;
-//   if (!token) return res.status(401).json("Not logged in!");
+exports.addStory = (req, res) => {
+  const token = req.cookies.accessToken;
+  if (!token) return res.status(401).json("Not logged in!");
 
-//   jwt.verify(token, "secretkey", (err, userInfo) => {
-//     if (err) return res.status(403).json("Token is not valid!");
+  jwt.verify(token, "secretkey", (err, userInfo) => {
+    if (err) return res.status(403).json("Token is not valid!");
 
-//     const q = "INSERT INTO stories(`img`, `createdAt`, `userId`) VALUES (?)";
-//     const values = [
-//       req.body.img,
-//       moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
-//       userInfo.id,
-//     ];
+    const q = "INSERT INTO relationships (`followerUserId`,`followedUserId`) VALUES (?)";
+    const values = [
+      userInfo.id,
+      req.body.userId
+    ];
 
-//     db.query(q, [values], (err, data) => {
-//       if (err) return res.status(500).json(err);
-//       return res.status(200).json("Story has been created.");
-//     });
-//   });
-// };
+    db.query(q, [values], (err, data) => {
+      if (err) return res.status(500).json(err);
+      return res.status(200).json("Following");
+    });
+  });
+};
 
-// export const deleteStory = (req, res) => {
-//   const token = req.cookies.accessToken;
-//   if (!token) return res.status(401).json("Not logged in!");
+exports.deleteStory = (req, res) => {
+  const token = req.cookies.accessToken;
+  if (!token) return res.status(401).json("Not logged in!");
 
-//   jwt.verify(token, "secretkey", (err, userInfo) => {
-//     if (err) return res.status(403).json("Token is not valid!");
+  jwt.verify(token, "secretkey", (err, userInfo) => {
+    if (err) return res.status(403).json("Token is not valid!");
 
-//     const q = "DELETE FROM stories WHERE `id`=? AND `userId` = ?";
+    const q = "DELETE FROM relationships WHERE `followerUserId` = ? AND `followedUserId` = ?";
 
-//     db.query(q, [req.params.id, userInfo.id], (err, data) => {
-//       if (err) return res.status(500).json(err);
-//       if (data.affectedRows > 0)
-//         return res.status(200).json("Story has been deleted.");
-//       return res.status(403).json("You can delete only your story!");
-//     });
-//   });
-// };
+    db.query(q, [userInfo.id, req.query.userId], (err, data) => {
+      if (err) return res.status(500).json(err);
+      return res.status(200).json("Unfollow");
+    });
+  });
+}

@@ -1,14 +1,13 @@
-// import express from "express";
-// import {
-//   getComments,
-//   addComment,
-//   deleteComment,
-// } from "../controllers/comment.js";
+const controller = require("../controllers/comment.controller");
 
-// const router = express.Router();
+module.exports = function(app) {
 
-// router.get("/", getComments);
-// router.post("/", addComment);
-// router.delete("/:id", deleteComment);
+  app.post("/api/user/comment", controller.create);
+  app.get("/api/user/comment/:id", controller.findOne);
+  app.delete("/api/user/comment/:id", controller.delete);
 
-// export default router;
+  app.get("/api/user/comment", controller.getComments);
+  app.post("/api/user/comment", controller.addComment);
+  app.delete("/api/user/comment/:id", controller.deleteComment);
+
+};

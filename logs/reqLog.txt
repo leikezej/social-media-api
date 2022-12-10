@@ -1,2 +1,3 @@
 20221211	03:38:52	ae067527-c58a-49a9-9374-2f7926121d67	GET	undefined	/
 20221211	03:38:53	ce541988-971b-4d18-9795-8e9a20cc5787	GET	undefined	/favicon.ico
+20221211	03:41:46	de4b3007-e6d4-43f5-ade2-019848d50fa4	POST	undefined	/api/auth/register

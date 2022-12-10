@@ -1,11 +1,15 @@
-// import express from "express";
-// import { getLikes, addLike, deleteLike } from "../controllers/like.js";
+const controller = require("../controllers/likes.controller");
 
-// const router = express.Router()
+module.exports = function(app) {
 
-// router.get("/", getLikes)
-// router.post("/", addLike)
-// router.delete("/", deleteLike)
+  app.post("/api/user/likes", controller.create);
+  app.get("/api/user/likes", controller.findAll);
+  app.get("/api/user/likes/:id", controller.findOne);
+  app.delete("/api/user/likes", controller.delete);
+  
+  app.get("/api/user/likes", controller.getLikes);
+  app.post("/api/user/likes", controller.addLike);
+  app.delete("/api/user/likes", controller.deleteLike);
 
 
-// export default router
+};

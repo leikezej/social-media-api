@@ -23,4 +23,8 @@ module.exports = function(app) {
   app.post("/api/auth/signin", controller.signin);
   app.post("/api/auth/refreshToken", controller.refreshToken);
   app.post("/api/auth/logout", controller.logout);
+  
+  app.post("/api/auth/login", controller.login);
+  app.post("/api/auth/register", controller.register);
+  
 };

@@ -1,31 +1,79 @@
-import express from "express";
+const dotenv = require('dotenv');
+dotenv.config()
+const express = require("express");
 const app = express();
-import authRoutes from "./routes/auth.js";
-import userRoutes from "./routes/users.js";
-import postRoutes from "./routes/posts.js";
-import commentRoutes from "./routes/comments.js";
-import likeRoutes from "./routes/likes.js";
-import relationshipRoutes from "./routes/relationships.js";
-import cors from "cors";
-import multer from "multer";
-import cookieParser from "cookie-parser";
+const cors = require("cors");
+const multer = require("multer");
+const cookieSession = require("cookie-session");
+const session = require('express-session');
+const cookieParser = require("cookie-parser");
 
-// const morgan = require('morgan');
+const { logger } = require('./middleware/logEvents');
+const morgan = require('morgan');
+
+const db = require("./models");
+const Role = db.role ;
+const User = db.user;
+const mysqlStore = require('express-mysql-session')(session);
 
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Credentials", true);
-  next();
-});
+var corsOptions = {
+  origin: "http://localhost:3000",
+  credentials: true
+  // origin: "*"
+};
+
+const sessionStore = new mysqlStore((db));
+
+db.sequelize.sync(
+     {force: true}
+    ).then(() => {
+        console.log('Drop and Resync Database!');
+        initial();
+    }).catch(err => {
+        console.log(err)
+    }
+);
+
+app.use(cookieParser());
+app.use(logger);
+app.use(morgan('dev'));
+app.use(cors(corsOptions));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use(
-  cors({
-    origin: "http://localhost:3000",
+  cookieSession({
+    name: "bugtech-session",
+    secret: "jepski-cokes",
+    // name: process.env.SESSION_COOKIE_NAME,
+    // secret: process.env.SESSION_COOKIE_SECRET,
+    httpOnly: true,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 60000 }
   })
 );
-app.use(cookieParser());
-// app.use(morgan('dev'));
-// app.use(logger);
+
+app.use(session({
+    name: "social-media-session",
+    secret:"social-jepski-secret",
+    // name: process.env.SESSION_NAME,
+    // secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true,
+    store: sessionStore,
+    
+    cookie: {
+        // maxAge: TWO_HOURS,
+        sameSite: true,
+        // secure: IN_PROD
+    }
+}))
+
+app.get("/", (req, res) => {
+  res.send("<h2>It's Working!</h2>");
+});
 
 
 const storage = multer.diskStorage({
@@ -44,15 +92,36 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
   res.status(200).json(file.filename);
 });
 
-app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/posts", postRoutes);
-app.use("/api/comments", commentRoutes);
-app.use("/api/likes", likeRoutes);
-app.use("/api/relationships", relationshipRoutes);
+require('./routes/auth.routes')(app);
+// require('./routes/users.routes')(app);
+// require('./routes/posts.routes')(app);
+// require('./routes/comments.routes')(app);
+// require('./routes/likes.routes')(app);
+// require('./routes/relationships.routes')(app);
 
 const PORT = process.env.PORT || 8800;
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
+
+// const server = app.listen(0420, function () {
+ 
+//   let host = server.address().address
+//   let port = server.address().port
+ 
+//   console.log("Backend Server running at http://%s:%s", host, port); 
+// })
+
+function initial() {
+   Role.create({
+     id: 1,
+     name: "user"
+   });
+
+   Role.create({
+     id: 2,
+     name: "admin"
+   });
+
+  }

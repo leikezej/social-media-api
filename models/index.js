@@ -65,6 +65,40 @@ db.comments.belongsToMany(db.user, {
 
 
 
+Like =  
+Comment = 
+Post = 
+Relationships = 
+Stories = 
+User = 
+
+// db.likes.belongsTo(db.user, {
+//   foreignKey: 'userId', targetKey: 'id',
+//     foreignKey:'postId', targetKey: 'postId'
+// });
+
+// db.comments.belongsToMany(db.user, {
+//   through: "posts",
+//   foreignKey: "userId",
+//   foreignKey: "postId",
+//   foreignKey: "commentUserId",
+//   otherKey: "commentUserId"
+// });
+
+// db.posts.belongsToMany(db.user, {
+//   // through: "user_roles",
+//   foreignKey: "userId",
+//   otherKey: "postId"
+// });
+
+// db.user.belongsToMany(db.posts, {
+//   // through: "user_roles",
+//   foreignKey: "userId",
+//   storyUserId: "id"
+// });
+
+
+
 
 db.ROLES = ["user", "admin"];
 

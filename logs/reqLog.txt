@@ -87,3 +87,11 @@
 20221211	06:22:59	40efe7c8-5fe9-4116-a89f-7ada37953b5b	POST	undefined	/api/auth/signup
 20221211	06:25:31	9ce00861-cdb6-4552-9c49-ed905d8e5903	POST	undefined	/api/auth/signup
 20221211	06:25:36	fbc8ef83-bc69-4400-8ac1-09af6a6c7335	GET	undefined	/api/users
+20221211	06:28:28	08116227-0741-4430-afec-8d4d9a6d2039	POST	undefined	/api/auth/signup
+20221211	06:30:04	b15c04d6-29c1-402e-b202-9b852034533f	POST	undefined	/api/auth/signup
+20221211	06:30:17	952b14db-4cae-4c9f-9916-0fd6a6b332a5	POST	undefined	/api/auth/signup
+20221211	06:30:19	66b3e69b-62bf-4c09-8c51-005acec8b2b1	GET	undefined	/api/users
+20221211	06:31:55	8b15860b-77d4-4f79-a6b1-352250d93929	POST	undefined	/api/auth/signup
+20221211	06:34:28	cd4cd3f3-8ebe-44bb-8d81-1a89e0b8c231	POST	undefined	/api/auth/signup
+20221211	06:34:39	3acc676b-6e40-4334-a9ac-3c21377d79c0	POST	undefined	/api/auth/signup
+20221211	06:34:47	39e877cc-49af-4039-92aa-de9422a5466d	GET	undefined	/api/users

@@ -22,14 +22,14 @@ module.exports = (sequelize, Sequelize) => {
     password: {
       type: Sequelize.STRING
     },
+    website:{
+      type: Sequelize.TEXT
+    },
     cover_image: {
       type: Sequelize.STRING
     },
     profile_image: {
       type: Sequelize.STRING
-    },
-    website:{
-        type: Sequelize.TEXT
     }
   });
 

@@ -7,6 +7,7 @@ const multer = require("multer");
 const cookieSession = require("cookie-session");
 const session = require('express-session');
 const cookieParser = require("cookie-parser");
+const router = express.Router();
 
 const { logger } = require('./middleware/logEvents');
 const morgan = require('morgan');
@@ -83,10 +84,12 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
 
 require('./routes/auth.routes')(app);
 require('./routes/users.routes')(app);
+
+require('./routes/likes.routes')(app);
+
 // require('./routes/comments.routes')(app);
 // require('./routes/stories.routes')(app);
 // require('./routes/relationships.routes')(app);
-// require('./routes/likes.routes')(app);
 // require('./routes/posts.routes')(app);
 
 const PORT = process.env.PORT || 8800;

@@ -55,22 +55,47 @@ db.user.hasOne(db.refreshToken, {
   foreignKey: 'userId', targetKey: 'id'
 });
 
-db.comments.belongsToMany(db.user, {
-  through: "posts",
-  foreignKey: "userId",
+
+db.likes.belongsToMany(db.user, {
+  through: "user_posts",
   foreignKey: "postId",
-  foreignKey: "commentUserId",
-  otherKey: "commentUserId"
+  foreignKey: "userId",
+  targetKey: "id"
+});
+
+db.posts.belongsToMany(db.likes, {
+  through: "posts_likes",
+  foreignKey: "postId",
+  foreignKey: "userId",
+  targetKey: "id"
+});
+
+db.user.belongsToMany(db.role, {
+  through: "user_roles",
+  foreignKey: "userId",
+  otherKey: "roleId"
 });
 
 
 
-Like =  
-Comment = 
-Post = 
-Relationships = 
-Stories = 
-User = 
+
+// db.products.hasMany(db.reviews, {
+//   foreignKey: 'productId',
+//   as: 'review'
+// })
+
+// db.reviews.belongsTo(db.products, {
+//   foreignKey: 'productId',
+//   as: 'product'
+// })
+
+
+// Like =  
+// Comment = 
+// Post = 
+// Relationships = 
+// Stories = 
+// User = 
 
 // db.likes.belongsTo(db.user, {
 //   foreignKey: 'userId', targetKey: 'id',
@@ -96,8 +121,6 @@ User =
 //   foreignKey: "userId",
 //   storyUserId: "id"
 // });
-
-
 
 
 db.ROLES = ["user", "admin"];

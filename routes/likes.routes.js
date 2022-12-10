@@ -1,15 +1,13 @@
-// const controller = require("../controllers/like.controller");
+const controller = require("../controllers/like.controller");
 
-// module.exports = function(app) {
+module.exports = function(app) {
 
-//   // app.post("/api/user/likes", controller.create);
-//   // app.get("/api/user/likes", controller.findAll);
-//   // app.get("/api/user/likes/:id", controller.findOne);
-//   // app.delete("/api/user/likes", controller.delete);
+  // app.post("/api/user/likes", controller.create);
+  app.get("/api/user/likes", controller.findOne);
+  app.delete("/api/user/likes", controller.delete);
   
-//   app.get("/api/user/likes", controller.getLikes);
-//   app.post("/api/user/likes", controller.addLike);
-//   app.delete("/api/user/likes", controller.deleteLike);
-
-
-// };
+    
+  app.post("/api/user/likes", controller.addLikes);
+  app.get("/api/user/likes", controller.getLikes);
+  app.delete("/api/user/likes", controller.deleteLike);
+};

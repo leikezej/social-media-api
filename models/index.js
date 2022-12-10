@@ -18,7 +18,6 @@ const sequelize = new Sequelize(
     }
   }
 );
-
 const db = {};
 
 db.Sequelize = Sequelize;
@@ -27,7 +26,6 @@ db.sequelize = sequelize;
 db.user = require("../models/user.model.js")(sequelize, Sequelize);
 db.role = require("../models/role.model.js")(sequelize, Sequelize);
 db.refreshToken = require("../models/refreshToken.model.js")(sequelize, Sequelize);
-
 db.session = require("../models/session.model.js")(sequelize, Sequelize);
 
 db.likes = require("../models/likes.model.js")(sequelize, Sequelize);
@@ -57,62 +55,17 @@ db.user.hasOne(db.refreshToken, {
   foreignKey: 'userId', targetKey: 'id'
 });
 
-
-// db.timein.belongsToMany(db.timeout, {
-//   through: "time_sheets",
-//   foreignKey: "timein_time",
-//   otherKey: "timeout_time"
-// })
-
-// db.timeout.belongsToMany(db.timein, {
-//   through: "time_sheets",
-//   foreignKey: "timeout_time",
-//   otherKey: "timein_time"
-// })
-
-// db.timeSheet.belongsTo(db.user,  {
-//   foreignKey: 'user_id', targetKey:'id'
-// });
-// db.user.hasOne(db.timeSheet, {
-//   foreignKey: 'user_id', targetKey: 'id'
-// });
-
-// db.timesheet.belongsTo(db.user, {
-//   foreignKey: 'user_id', targetKey: 'id'
-// });
-
-// db.user.hasOne(db.timesheet, {
-//   foreignKey: 'user_id', targetKey: 'id'
-// });
+db.comments.belongsToMany(db.user, {
+  through: "posts",
+  foreignKey: "userId",
+  foreignKey: "postId",
+  foreignKey: "commentUserId",
+  otherKey: "commentUserId"
+});
 
 
-// db.refreshToken.belongsTo(db.user, {
-//   foreignKey: 'user_id', targetKey: 'id'
-// });
 
-// db.user.hasOne(db.refreshToken, {
-//   foreignKey: 'user_id', targetKey: 'id'
-// });
 
 db.ROLES = ["user", "admin"];
 
 module.exports = db;
-
-  // users.associate = function (models) {
-  //   users.belongsToMany(models.roles, {
-  //     through: "user_roles",
-  //     foreignKey: "userId",
-  //     otherKey: "roleId"    
-  //   });
-
-
-  //   users.belongsToMany(models.phones, {
-  //     through: "user_phones",
-  //     foreignKey: "userId",
-  //     otherKey: "phoneId",
-  //     constraints: false   
-  //   });
-
-  //   users.belongsTo(models.businesses, {
-  //     foreignKey: 'businessId', as: "business"
-  //   });

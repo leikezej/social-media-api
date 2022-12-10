@@ -11,12 +11,9 @@ module.exports = function(app) {
     next();
   });
 
-  app.post("/api/users", controller.findAll);
-  app.post("/api/users", controller.findOne);
-  app.put("/api/users", controller.update);
-  app.delete("/api/users", controller.delete);
+  app.get("/api/users", controller.findAll);
+  app.get("/api/users", controller.findOne);
+  app.put("/api/users/:id", controller.update);
+  app.delete("/api/users/:id", controller.delete);
   app.delete("/api/users", controller.deleteAll);
-  
-  app.get("/api/users", controller.getUser);
-  app.put("/api/users", controller.updateUser);
 };

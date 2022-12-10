@@ -28,18 +28,26 @@ db.user = require("../models/user.model.js")(sequelize, Sequelize);
 db.role = require("../models/role.model.js")(sequelize, Sequelize);
 db.refreshToken = require("../models/refreshToken.model.js")(sequelize, Sequelize);
 
+db.session = require("../models/session.model.js")(sequelize, Sequelize);
 
-// db.role.belongsToMany(db.user, {
-//   through: "user_roles",
-//   foreignKey: "role_id",
-//   otherKey: "user_id"
-// });
+db.likes = require("../models/likes.model.js")(sequelize, Sequelize);
+db.comments = require("../models/comments.model.js")(sequelize, Sequelize);
+db.posts = require("../models/posts.model.js")(sequelize, Sequelize);
+db.relationships = require("../models/relationships.model.js")(sequelize, Sequelize);
+db.stories = require("../models/stories.model.js")(sequelize, Sequelize);
+db.user = require("../models/user.model.js")(sequelize, Sequelize);
 
-// db.user.belongsToMany(db.role, {
-//   through: "user_roles",
-//   foreignKey: "user_id",
-//   otherKey: "role_id"
-// });
+db.role.belongsToMany(db.user, {
+  through: "user_roles",
+  foreignKey: "roleId",
+  otherKey: "userId"
+});
+
+db.user.belongsToMany(db.role, {
+  through: "user_roles",
+  foreignKey: "userId",
+  otherKey: "roleId"
+});
 
 // db.timein.belongsToMany(db.timeout, {
 //   through: "time_sheets",

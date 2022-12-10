@@ -16,11 +16,9 @@ const Role = db.role ;
 const User = db.user;
 const mysqlStore = require('express-mysql-session')(session);
 
-
 var corsOptions = {
   origin: "http://localhost:3000",
   credentials: true
-  // origin: "*"
 };
 
 const sessionStore = new mysqlStore((db));
@@ -44,10 +42,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cookieSession({
-    name: "bugtech-session",
-    secret: "jepski-cokes",
-    // name: process.env.SESSION_COOKIE_NAME,
-    // secret: process.env.SESSION_COOKIE_SECRET,
+    name: process.env.SESSION_COOKIE_NAME,
+    secret: process.env.SESSION_COOKIE_SECRET,
     httpOnly: true,
     resave: false,
     saveUninitialized: true,
@@ -56,25 +52,18 @@ app.use(
 );
 
 app.use(session({
-    name: "social-media-session",
-    secret:"social-jepski-secret",
-    // name: process.env.SESSION_NAME,
-    // secret: process.env.SESSION_SECRET,
+    name: process.env.SESSION_NAME,
+    secret: process.env.SESSION_SECRET,
     resave: true,
     saveUninitialized: true,
     store: sessionStore,
     
     cookie: {
+      sameSite: true,
         // maxAge: TWO_HOURS,
-        sameSite: true,
         // secure: IN_PROD
     }
 }))
-
-app.get("/", (req, res) => {
-  res.send("<h2>It's Working!</h2>");
-});
-
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -104,14 +93,6 @@ const PORT = process.env.PORT || 8800;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
-
-// const server = app.listen(0420, function () {
- 
-//   let host = server.address().address
-//   let port = server.address().port
- 
-//   console.log("Backend Server running at http://%s:%s", host, port); 
-// })
 
 function initial() {
    Role.create({
